@@ -54,11 +54,13 @@ function ssh_keygen(location, opts, callback){
 	var pubLocation = location+'.pub';
 	if(!opts.comment) opts.comment = '';
 	if(!opts.password) opts.password = '';
+	if(!opts.format) opts.format = 'PEM';
 	if(!opts.size) opts.size = '2048';
 
 	var keygen = spawn(binPath(), [
 		'-t','rsa',
 		'-b', opts.size,
+		'-m', opts.format,
 		'-C', opts.comment,
 		'-N', opts.password,
 		'-f', location

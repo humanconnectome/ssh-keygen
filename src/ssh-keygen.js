@@ -57,14 +57,19 @@ function ssh_keygen(location, opts, callback){
 	if(!opts.format) opts.format = 'PEM';
 	if(!opts.size) opts.size = '2048';
 
-	var keygen = spawn(binPath(), [
+    var params = [
 		'-t','rsa',
 		'-b', opts.size,
-		'-m', opts.format,
 		'-C', opts.comment,
 		'-N', opts.password,
 		'-f', location
-	]);
+	];
+
+	if(process.platform !== 'win32'){
+        params.unshift('-m', opts.format);
+    }
+
+	var keygen = spawn(binPath(), params);
 
 	keygen.stdout.on('data', function(a){
 		log('stdout:'+a);
